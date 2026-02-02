@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator | Certimailer</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 18px;
+    }
+
+    .proof-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .proof-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .proof-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .proof-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+
+    .live-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 12px 0 18px;
+    }
+
+    .live-controls input {
+      flex: 1;
+      min-width: 240px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.25);
+      color: #fff;
+      outline: none;
+    }
+
+    .live-controls button {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .live-controls button:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .muted-small {
+      opacity: 0.8;
+      font-size: 0.95rem;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .tiny {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    /* ===== Generator styling (same theme) ===== */
+    .gen-title {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      color: #fff;
+    }
+
+    .gen-sub {
+      margin: 0 0 14px;
+      opacity: 0.85;
+    }
+
+    .gen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 1300px) {
+      .gen-grid { grid-template-columns: repeat(2, minmax(240px, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .gen-grid { grid-template-columns: 1fr; }
+    }
+
+    .gen-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .gen-box h3 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-size: 1.02rem;
+    }
+
+    .gen-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    .gen-row input,
+    .gen-row select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.25);
+      color: #fff;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .gen-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .gen-actions button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .gen-actions button:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .mono-visible {
+      display: block !important;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.92rem;
+    }
+
+    .gen-meta {
+      margin-top: 10px;
+      opacity: 0.85;
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    /* Collapsible verification tests card */
+    details.vtests summary {
+      cursor: pointer;
+      user-select: none;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 4px 0;
+      list-style: none;
+    }
+
+    details.vtests summary::-webkit-details-marker {
+      display: none;
+    }
+  </style>
+
+  <script src="js/generator.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h2 class="logo">Certimailer</h2>
+    <nav>
+      <ul>
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="detection.html">Detection Tool</a></li>
+        <li><a href="header-analyzer.html">Header Analyzer</a></li>
+        <li><a href="Generator.html" class="active">Generator</a></li>
+        <li><a href="learning.html">Learning</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-hero">
+      <p class="kicker">DEPLOYMENT ASSISTANT</p>
+      <h1 class="page-title">Email Authentication Record Generator</h1>
+      <p class="page-subtitle">
+        Build copy-paste DNS records for SPF and DMARC, plus a DKIM DNS template to help you deploy email authentication correctly.
+      </p>
+    </section>
+
+    <!-- MAIN GENERATOR CARD (FULL WIDTH) -->
+    <div class="card">
+      <h2 class="gen-title">Fix & Generate Records</h2>
+      <p class="gen-sub muted">
+        Generates recommended templates for SPF + DMARC and a DKIM DNS template (DKIM keys must be generated by your provider/server).
+      </p>
+
+      <div class="live-controls">
+        <input id="genDomain" type="text" placeholder="Domain (e.g., example.com)" value="">
+        <input id="genSelector" type="text" placeholder="DKIM selector (default: selector1)" value="selector1">
+        <button id="genClearBtn">Clear</button>
+      </div>
+
+      <!-- Side-by-side generators -->
+      <div class="gen-grid">
+
+        <!-- SPF -->
+        <div class="gen-box">
+          <h3>SPF Builder</h3>
+          <div class="muted-small">Authorized senders. Keep only one SPF record per domain.</div>
+
+          <div class="gen-row">
+            <input id="spfIps" type="text" placeholder="Authorized IPs (comma-separated) e.g., 58.182.14.212">
+            <input id="spfIncludes" type="text" placeholder="Includes (comma-separated) e.g., spf.google.com">
+            <select id="spfQualifier" aria-label="SPF qualifier">
+              <option value="-all" selected>-all (Fail others)</option>
+              <option value="~all">~all (Softfail)</option>
+              <option value="?all">?all (Neutral)</option>
+              <option value="+all">+all (Allow all)</option>
+            </select>
+          </div>
+
+          <div class="gen-meta">Host/Name: <b>@</b> &nbsp;|&nbsp; Type: <b>TXT</b></div>
+          <div id="spfOut" class="mono-visible">v=spf1 -all</div>
+
+          <div class="gen-actions">
+            <button id="copySpfBtn">Copy SPF</button>
+          </div>
+        </div>
+
+        <!-- DMARC -->
+        <div class="gen-box">
+          <h3>DMARC Builder</h3>
+          <div class="muted-small">Start with quarantine/reject when confident. Reports via <code>rua</code>.</div>
+
+          <div class="gen-row">
+            <select id="dmarcPolicy" aria-label="DMARC policy">
+              <option value="none">p=none (Monitor)</option>
+              <option value="quarantine" selected>p=quarantine</option>
+              <option value="reject">p=reject</option>
+            </select>
+
+            <input id="dmarcRua" type="text" placeholder="rua email (e.g., dmarc-reports@yourdomain.com)">
+
+            <select id="dmarcPct" aria-label="DMARC pct">
+              <option value="100" selected>pct=100</option>
+              <option value="50">pct=50</option>
+              <option value="25">pct=25</option>
+            </select>
+          </div>
+
+          <div class="gen-meta">Host/Name: <b>_dmarc</b> &nbsp;|&nbsp; Type: <b>TXT</b></div>
+          <div id="dmarcOut" class="mono-visible">v=DMARC1; p=quarantine; fo=1; pct=100</div>
+
+          <div class="gen-actions">
+            <button id="copyDmarcBtn">Copy DMARC</button>
+          </div>
+        </div>
+
+        <!-- DKIM -->
+        <div class="gen-box">
+          <h3>DKIM DNS Template</h3>
+          <div class="muted-small">We show DNS host + template value. Paste your provider’s public key into <code>p=</code>.</div>
+
+          <div class="gen-meta">
+            Host/Name: <b><span id="dkimHostLabel">selector1._domainkey.example.com</span></b> &nbsp;|&nbsp; Type: <b>TXT</b>
+          </div>
+
+          <div id="dkimValOut" class="mono-visible">v=DKIM1; k=rsa; p=REPLACE_WITH_PUBLIC_KEY_FROM_PROVIDER</div>
+
+          <div class="gen-actions">
+            <button id="copyDkimHostBtn">Copy DKIM Host</button>
+            <button id="copyDkimValBtn">Copy DKIM Value</button>
+          </div>
+
+          <div class="muted-small" style="margin-top:10px;">
+            Tip: Get the key from Mailgun/Google Workspace/OpenDKIM/etc. This is a template.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="muted-small" style="margin-top:12px;">
+        Note: DKIM requires a provider-generated keypair. This page helps you build the correct DNS host and a valid template value.
+      </div>
+    </div>
+
+  
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>© 2025 Certimailer. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
