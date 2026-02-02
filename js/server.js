@@ -84,5 +84,5 @@ app.get("/api/check", async (req, res) => {
 
 app.listen(3000, () => {
   console.log("Server running:");
-  console.log("  http://localhost:3000/visualization.html");
+  console.log("  http://localhost:3000/Generator.html");
 });
